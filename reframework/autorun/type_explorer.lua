@@ -279,11 +279,11 @@ end
 
 local function main()
   re.on_draw_ui(function()
-    if not imgui.tree_node("Object Explorer") then return end
+    if not imgui.tree_node("Type Explorer") then return end
     if imgui.button("Reset") then init() end
     if not pcall(draw_ui) then
       imgui.text("Failed to render menu")
-      log.error("[object_explorer] Failed to render menu")
+      log.error("[type_explorer] Failed to render menu")
     end
     imgui.tree_pop()
   end)
