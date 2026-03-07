@@ -278,14 +278,27 @@ local function draw_ui()
 end
 
 local function main()
+  local is_window_open = false
+
   re.on_draw_ui(function()
-    if not imgui.tree_node("Type Explorer") then return end
-    if imgui.button("Reset") then init() end
-    if not pcall(draw_ui) then
-      imgui.text("Failed to render menu")
-      log.error("[type_explorer] Failed to render menu")
+    if imgui.button("Type Explorer") then
+      is_window_open = not is_window_open
     end
-    imgui.tree_pop()
+
+    if is_window_open then
+      imgui.push_style_var(2, Vector2f.new(5, 5)) -- Window padding
+      imgui.push_style_var(3, 7.5)                -- Rounded window
+      -- 64 = AlwaysAutoResize, 40 = NoCollapse + NoScrollbar
+      is_window_open = imgui.begin_window("Type Explorer", is_window_open, 64 | 40)
+
+      if imgui.button("Reset") then init() end
+      if not pcall(draw_ui) then
+        imgui.text("Failed to render menu")
+      end
+
+      imgui.pop_style_var(2)
+      imgui.end_window()
+    end
   end)
 end
 
