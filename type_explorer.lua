@@ -252,10 +252,10 @@ local function draw_fields(type)
 end
 
 local function draw_ui()
-  _, type_paths = imgui.input_text("Type paths (separated by commas ',')", type_paths)
+  _, type_paths = imgui.input_text_multiline("Type paths (one per line)", type_paths, Vector2f.new(400, 50))
 
   current_type = 1
-  for ty in string.gmatch(type_paths, "([^,]+)") do
+  for ty in string.gmatch(type_paths, "[^\n]+") do
     ty = string.gsub(ty, "%s+", "")
     local type = sdk.find_type_definition(ty)
     if type ~= nil then
@@ -286,8 +286,10 @@ local function main()
     end
 
     if is_window_open then
-      imgui.push_style_var(2, Vector2f.new(5, 5)) -- Window padding
-      imgui.push_style_var(3, 7.5)                -- Rounded window
+      -- Window padding
+      imgui.push_style_var(2, Vector2f.new(5, 5))
+      -- Rounded window
+      imgui.push_style_var(3, 7.5)
       -- 64 = AlwaysAutoResize, 40 = NoCollapse + NoScrollbar
       is_window_open = imgui.begin_window("Type Explorer", is_window_open, 64 | 40)
 
